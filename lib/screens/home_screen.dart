@@ -261,12 +261,16 @@ class _HomeScreenState extends State<HomeScreen>
                     const SizedBox(height: 5),
                     Row(
                       children: [
-                        Image.asset(
-                          'assets/logo_geo_uniao.png',
-                          height: 40,
-                        ),
+                        Image.asset('assets/logo_geo_uniao.png', height: 40),
                         const SizedBox(width: 10),
-                        Text(user?.username ?? 'Visitante'),
+                        Text(
+                          user?.username ?? 'Visitante',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -321,15 +325,35 @@ class _HomeScreenState extends State<HomeScreen>
       ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _takePhotoAndAddDetails,
-        icon: const Icon(Icons.camera_alt, color: Colors.black),
-        label: const Text(
-          'Tirar Foto',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      floatingActionButton: Container(
+        height: 65,
+        width: 200,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [Color(0xFF8E76FF), Color(0xFF6B4EFF)],
+          ),
+          borderRadius: BorderRadius.circular(35),
         ),
-        backgroundColor: const Color(0xFF6B4EFF),
-        elevation: 4,
+        child: FloatingActionButton.extended(
+          onPressed: _takePhotoAndAddDetails,
+          elevation: 0,
+          focusElevation: 0,
+          hoverElevation: 0,
+          highlightElevation: 0,
+          backgroundColor: Colors.transparent,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
+          icon: const Icon(Icons.camera_alt, color: Colors.white, size: 26),
+          label: const Text(
+            'Tirar Foto',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ),
     );
   }
