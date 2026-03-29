@@ -12,7 +12,7 @@ import 'photo_detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final CameraDescription camera;
-  const HomeScreen({Key? key, required this.camera}) : super(key: key);
+  const HomeScreen({super.key, required this.camera});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -30,6 +30,17 @@ class _HomeScreenState extends State<HomeScreen>
     final id = settings.get('currentUserId') as String?;
     if (id == null) return null;
     return usersBox.get(id);
+  }
+
+  void getLocationPermission() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        exit(1);
+      }
+    }
   }
 
   @override
@@ -123,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen>
                         const Spacer(),
                         Switch(
                           value: isPublic,
-                          activeColor: const Color(0xFF6B4EFF),
+                          activeThumbColor: const Color(0xFF6B4EFF),
                           onChanged: (v) => setState(() => isPublic = v),
                         ),
                       ],
@@ -225,6 +236,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    getLocationPermission();
+    
     final user = currentUser;
 
     return Scaffold(
@@ -343,7 +356,9 @@ class _HomeScreenState extends State<HomeScreen>
           hoverElevation: 0,
           highlightElevation: 0,
           backgroundColor: Colors.transparent,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(35)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(35),
+          ),
           icon: const Icon(Icons.camera_alt, color: Colors.white, size: 26),
           label: const Text(
             'Tirar Foto',
@@ -399,8 +414,9 @@ class _HomeScreenState extends State<HomeScreen>
                 onDelete: () {
                   if (isMine || p.ownerId == currentUser?.id) {
                     _deletePhoto(p);
-                    if (Navigator.of(context).canPop())
+                    if (Navigator.of(context).canPop()) {
                       Navigator.of(context).pop();
+                    }
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
